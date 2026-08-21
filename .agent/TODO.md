@@ -41,8 +41,9 @@
 
 ## P5 Recordings
 
-- [ ] sql-source adapter
-- [ ] audio 200 / 409 ipo_encrypted_r11
+- [x] sql-source adapter (fixtures; live SELECT stub → health degraded)
+- [x] audio 200 / 409 ipo_encrypted_r11
+- [ ] live MariaDB/PG SELECT for RECORDINGS_SQL_URL (сейчас sql_stub/degraded)
 
 ## P6 UI four views
 

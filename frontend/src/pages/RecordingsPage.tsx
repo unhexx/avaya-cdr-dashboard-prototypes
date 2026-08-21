@@ -70,12 +70,7 @@ export function RecordingsPage() {
     try {
       const res = await fetch(`/api/recordings/${rec.id}/audio`)
       if (res.status === 409) {
-        const body = (await res.json()) as { error?: { reason?: string } }
-        if (body.error?.reason === 'ipo_encrypted_r11') {
-          setPlayError(ENCRYPTED_MSG)
-        } else {
-          setPlayError(ENCRYPTED_MSG)
-        }
+        setPlayError(ENCRYPTED_MSG)
         return
       }
       if (!res.ok) {

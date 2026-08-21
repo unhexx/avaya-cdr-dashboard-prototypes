@@ -16,3 +16,4 @@ P2: SAT parsers (`status health`, `display alarms`, `status ds1`); mock + SNMP s
 
 - Primary worktree may be root-owned; SSOT is `origin/main`.
 - No SysMonitor. Encrypted IPO audio stays 409 (P5).
+- P5 on-demand recordings: fixtures path live; `RECORDINGS_SQL_URL` without SELECT → connector health `degraded`/`sql_stub` (live engine deferred).

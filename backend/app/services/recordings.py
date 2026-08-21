@@ -41,19 +41,19 @@ def recording_out(row: dict[str, Any]) -> dict[str, Any]:
         "dialed_number": row.get("dialed_number"),
         "filename": row.get("filename"),
         "mime_type": row.get("mime_type"),
-        "encrypted": bool(row.get("encrypted")),
+        "encrypted": is_encrypted(row),
         "encryption_hint": row.get("encryption_hint"),
         "sql_source_id": row.get("sql_source_id"),
     }
 
 
 def resolve_media_path(filename: str, media_root: Path) -> Path:
-    """Безопасный join: отказ при path traversal."""
+    """Безопасный join: отказ при path traversal и symlink escape."""
     if not filename or ".." in Path(filename).parts or filename.startswith(("/", "\\")):
         raise ValueError("invalid_filename")
     root = media_root.resolve()
     target = (root / filename).resolve()
-    if not str(target).startswith(str(root)):
+    if not target.is_relative_to(root):
         raise ValueError("path_traversal")
     return target
 
@@ -107,7 +107,7 @@ class InMemoryRecordingsService:
         if ucid:
             items = [r for r in items if (r.get("ucid") or "") == ucid]
         if encrypted is not None:
-            items = [r for r in items if bool(r.get("encrypted")) is encrypted]
+            items = [r for r in items if is_encrypted(r) is encrypted]
         items = sorted(
             items,
             key=lambda r: r.get("start_time") or datetime.min,

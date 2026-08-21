@@ -96,25 +96,37 @@ class SqlSourceConnector:
 
     def __init__(self) -> None:
         self._rows: list[dict[str, Any]] = []
+        self._sql_stub = False
 
     async def start(self) -> None:
         settings = get_settings()
         if settings.recordings_sql_url:
             # Живой SELECT откладываем: v1 CI работает на фикстурах.
+            # DSN задан → stub (degraded), без ложного «ok / sql».
             self._rows = []
+            self._sql_stub = True
             return
+        self._sql_stub = False
         self._rows = load_fixture_recordings()
 
     async def stop(self) -> None:
         self._rows = []
+        self._sql_stub = False
 
     async def poll_health(self) -> dict[str, Any]:
         settings = get_settings()
-        mode = "sql" if settings.recordings_sql_url else "fixtures"
+        if settings.recordings_sql_url:
+            return {
+                "name": self.name,
+                "status": "degraded",
+                "mode": "sql_stub",
+                "count": 0,
+                "detail": "RECORDINGS_SQL_URL set; live SELECT not implemented in this slice",
+            }
         return {
             "name": self.name,
             "status": "ok",
-            "mode": mode,
+            "mode": "fixtures",
             "count": len(self._rows),
         }
 
