@@ -69,10 +69,27 @@ def test_api_logs_kind_sip_and_e1() -> None:
     body = sip.json()
     assert body["total"] == 8
     assert body["items"][0]["call_id"] is not None or body["items"][0]["sip_method"]
+    # Message без префикса NIL STRUCTURED-DATA "-"
+    invite = next(
+        i
+        for i in body["items"]
+        if i.get("sip_method") == "INVITE" and i.get("call_id") == "c7f1abcd@sm.local"
+    )
+    assert not invite["message"].startswith("-")
+    assert invite["message"].startswith("INVITE")
     e1 = client.get("/api/logs", params={"kind": "e1"})
     assert e1.status_code == 200
     assert e1.json()["total"] == 7
     assert e1.json()["items"][0]["ds1_board"]
+
+
+def test_api_logs_kind_alarm_empty_ok() -> None:
+    client = TestClient(create_app())
+    alarm = client.get("/api/logs", params={"kind": "alarm"})
+    assert alarm.status_code == 200
+    payload = alarm.json()
+    assert payload["total"] == 0
+    assert payload["items"] == []
 
 
 def test_api_logs_openapi() -> None:
@@ -98,6 +115,32 @@ def test_sbce_sip_line() -> None:
     assert ev.host == "sbce-01"
     assert ev.sip_method == "INVITE"
     assert ev.call_id == "out-10003@sbce.local"
+    assert ev.message.startswith("INVITE sip:")
+
+
+def test_sbce_sip_without_cseq_recovers_method() -> None:
+    raw = (
+        "<134>1 2026-08-21T14:31:10.200Z sbce-01 SIP: INVITE "
+        "sip:84951234001@itsp.example SIP/2.0 Call-ID: out-10003@sbce.local"
+    )
+    ev = parse_sip_line(raw)
+    assert ev is not None
+    assert ev.sip_method == "INVITE"
+    assert ev.call_id == "out-10003@sbce.local"
+    assert "sip:84951234001@itsp.example" in ev.message
+
+
+def test_sm_message_not_prefixed_with_nil_sd() -> None:
+    raw = (
+        "<134>1 2026-08-21T14:30:02.100Z session-manager-01 sip - - - "
+        "INVITE sip:1205@avaya.local SIP/2.0 Call-ID: c7f1abcd@sm.local "
+        "From: <sip:79031234567@pstn.local> CSeq: 1 INVITE"
+    )
+    ev = parse_sip_line(raw)
+    assert ev is not None
+    assert ev.message.startswith("INVITE")
+    assert not ev.message.startswith("-")
+    assert ev.sip_method == "INVITE"
 
 
 def test_e1_cleared_line() -> None:

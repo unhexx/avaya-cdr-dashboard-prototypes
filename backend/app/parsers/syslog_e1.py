@@ -55,9 +55,8 @@ def parse_e1_line(raw: str) -> NormalizedLogEvent | None:
     alarm_type = None
     am = _ALARM.search(msg)
     if am:
-        alarm_type = am.group(1).upper()
-        if alarm_type not in _ALARM_TYPES:
-            alarm_type = alarm_type
+        token = am.group(1).upper()
+        alarm_type = token if token in _ALARM_TYPES else None
     if event_time is None:
         event_time = datetime(2026, 8, 21, 0, 0, tzinfo=UTC)
     return NormalizedLogEvent(

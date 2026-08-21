@@ -18,14 +18,25 @@ _SEV_NAMES = (
     "debug",
 )
 
+# Полный RFC 5424: PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG
 _RFC5424 = re.compile(
     r"^<(?P<pri>\d+)>"
     r"(?P<version>\d+)\s+"
     r"(?P<ts>\S+)\s+"
     r"(?P<host>\S+)\s+"
     r"(?P<app>\S+)\s+"
-    r"\S+\s+"  # procid
-    r"\S+\s+"  # msgid
+    r"(?P<procid>\S+)\s+"
+    r"(?P<msgid>\S+)\s+"
+    r"(?P<sd>-|\[(?:\\.|[^\]])*\])\s+"
+    r"(?P<msg>.*)$"
+)
+
+# Компактный SBCE: <PRI>1 TIMESTAMP HOST MSG… (без app/procid/msgid/SD)
+_RFC5424_COMPACT = re.compile(
+    r"^<(?P<pri>\d+)>"
+    r"(?P<version>\d+)\s+"
+    r"(?P<ts>\S+)\s+"
+    r"(?P<host>\S+)\s+"
     r"(?P<msg>.*)$"
 )
 
@@ -41,6 +52,12 @@ _CSEQ = re.compile(r"CSeq:\s*\d+\s+(\w+)", re.IGNORECASE)
 _RESP = re.compile(r"SIP/2\.0\s+(\d{3})")
 _METHOD = re.compile(
     r"\b(INVITE|ACK|BYE|CANCEL|REGISTER|OPTIONS|PRACK|UPDATE|REFER|SUBSCRIBE|NOTIFY|INFO|MESSAGE|PUBLISH)\b",
+    re.IGNORECASE,
+)
+# Request-line: METHOD sip:… SIP/2.0
+_REQ_LINE = re.compile(
+    r"^(?:SIP:\s*)?(INVITE|ACK|BYE|CANCEL|REGISTER|OPTIONS|PRACK|UPDATE|REFER|"
+    r"SUBSCRIBE|NOTIFY|INFO|MESSAGE|PUBLISH)\s+sip:",
     re.IGNORECASE,
 )
 
@@ -97,6 +114,11 @@ def parse_syslog_header(raw: str) -> tuple[datetime | None, str | None, str | No
         ts = _parse_ts(m.group("ts"))
         sev = _pri_severity(int(m.group("pri")))
         return ts, m.group("host"), sev, m.group("msg").strip()
+    m = _RFC5424_COMPACT.match(line)
+    if m:
+        ts = _parse_ts(m.group("ts"))
+        sev = _pri_severity(int(m.group("pri")))
+        return ts, m.group("host"), sev, m.group("msg").strip()
     m = _BSD.match(line)
     if m:
         # Год фикстур проекта
@@ -115,12 +137,31 @@ def is_sip_line(message: str) -> bool:
     return any(hint.upper() in upper for hint in _SIP_HINTS)
 
 
+def _extract_sip_method(msg: str) -> str | None:
+    cm = _CSEQ.search(msg)
+    if cm:
+        return cm.group(1).upper()
+    rm = _REQ_LINE.search(msg.lstrip())
+    if rm:
+        return rm.group(1).upper()
+    # Ответ SIP/2.0 NNN — метода нет; иначе первое ключевое слово
+    if _RESP.search(msg):
+        return None
+    mm = _METHOD.search(msg)
+    if mm:
+        return mm.group(1).upper()
+    return None
+
+
 def parse_sip_line(raw: str) -> NormalizedLogEvent | None:
     """Разбор одной SIP-строки. None, если не SIP."""
     event_time, host, severity, body = parse_syslog_header(raw)
     if not is_sip_line(body) and not is_sip_line(raw):
         return None
     msg = body or raw.strip()
+    # Убрать префикс "SIP: " у компактных SBCE-строк для чистого message
+    if msg.upper().startswith("SIP:"):
+        msg = msg[4:].lstrip()
     call_id = None
     m = _CALL_ID.search(msg)
     if m:
@@ -129,14 +170,7 @@ def parse_sip_line(raw: str) -> NormalizedLogEvent | None:
     rm = _RESP.search(msg)
     if rm:
         sip_response = int(rm.group(1))
-    sip_method: str | None = None
-    cm = _CSEQ.search(msg)
-    if cm:
-        sip_method = cm.group(1).upper()
-    else:
-        mm = _METHOD.search(msg)
-        if mm:
-            sip_method = mm.group(1).upper()
+    sip_method = _extract_sip_method(msg)
     if event_time is None:
         event_time = datetime(2026, 8, 21, 0, 0, tzinfo=UTC)
     return NormalizedLogEvent(

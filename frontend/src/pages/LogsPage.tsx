@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -27,6 +27,8 @@ const KIND_TABS: { id: LogKind; label: string }[] = [
   { id: 'alarm', label: 'Аварии' },
 ]
 
+const DEBOUNCE_MS = 300
+
 function severityVariant(severity: string | null): 'abandoned' | 'busy' | 'other' | 'default' {
   if (!severity) return 'default'
   if (severity === 'emerg' || severity === 'alert' || severity === 'crit' || severity === 'err') {
@@ -44,14 +46,18 @@ export function LogsPage() {
   const [callId, setCallId] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const kindRef = useRef(kind)
+  const skipFilterDebounce = useRef(true)
+  kindRef.current = kind
 
-  const load = useCallback(async () => {
+  const fetchLogs = useCallback(async (nextKind: LogKind, nextQ: string, nextCallId: string) => {
     setLoading(true)
     setError(null)
     try {
-      const params = new URLSearchParams({ kind })
-      if (q.trim()) params.set('q', q.trim())
-      if (callId.trim()) params.set('call_id', callId.trim())
+      const params = new URLSearchParams({ kind: nextKind })
+      if (nextQ.trim()) params.set('q', nextQ.trim())
+      if (nextCallId.trim()) params.set('call_id', nextCallId.trim())
       const res = await fetch(`/api/logs?${params}`)
       if (!res.ok) throw new Error(String(res.status))
       const json = (await res.json()) as { items: LogEvent[]; total: number }
@@ -62,11 +68,40 @@ export function LogsPage() {
     } finally {
       setLoading(false)
     }
-  }, [kind, q, callId])
+  }, [])
 
+  // Вкладка kind — сразу (с текущими q/callId)
   useEffect(() => {
-    void load()
-  }, [load])
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+      debounceRef.current = null
+    }
+    void fetchLogs(kind, q, callId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- q/callId через debounce
+  }, [kind, fetchLogs])
+
+  // q / callId — debounce 300 мс (пропуск первого mount)
+  useEffect(() => {
+    if (skipFilterDebounce.current) {
+      skipFilterDebounce.current = false
+      return
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      void fetchLogs(kindRef.current, q, callId)
+    }, DEBOUNCE_MS)
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [q, callId, fetchLogs])
+
+  function applyFilters() {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+      debounceRef.current = null
+    }
+    void fetchLogs(kind, q, callId)
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -93,7 +128,7 @@ export function LogsPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">Фильтры</CardTitle>
-          <CardDescription>Поиск по сообщению и Call-ID</CardDescription>
+          <CardDescription>Поиск по сообщению и Call-ID (debounce 300 мс)</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3 items-end">
           <label className="flex flex-col gap-1 text-sm">
@@ -102,6 +137,9 @@ export function LogsPage() {
               className="border rounded-md px-3 py-2 bg-background min-w-[12rem]"
               value={q}
               onChange={(e) => setQ(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') applyFilters()
+              }}
               placeholder="INVITE, LOS…"
             />
           </label>
@@ -112,11 +150,14 @@ export function LogsPage() {
                 className="border rounded-md px-3 py-2 bg-background min-w-[12rem] font-mono text-xs"
                 value={callId}
                 onChange={(e) => setCallId(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') applyFilters()
+                }}
                 placeholder="c7f1abcd@sm.local"
               />
             </label>
           ) : null}
-          <Button onClick={() => void load()} disabled={loading}>
+          <Button onClick={applyFilters} disabled={loading}>
             {loading ? 'Загрузка…' : 'Обновить'}
           </Button>
         </CardContent>
@@ -174,7 +215,10 @@ export function LogsPage() {
                     <tr key={ev.id} className="border-b last:border-0 align-top">
                       <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">
                         {ev.event_time
-                          ? ev.event_time.replace('T', ' ').replace('+00:00', ' UTC').replace('Z', ' UTC')
+                          ? ev.event_time
+                              .replace('T', ' ')
+                              .replace('+00:00', ' UTC')
+                              .replace('Z', ' UTC')
                           : '—'}
                       </td>
                       <td className="py-2 pr-3 font-mono text-xs">{ev.host ?? '—'}</td>
@@ -205,7 +249,9 @@ export function LogsPage() {
                               '—'
                             )}
                           </td>
-                          <td className="py-2 pr-3 font-mono text-xs break-all">{ev.call_id ?? '—'}</td>
+                          <td className="py-2 pr-3 font-mono text-xs break-all">
+                            {ev.call_id ?? '—'}
+                          </td>
                         </>
                       ) : null}
                       {kind === 'e1' ? (
