@@ -7,6 +7,7 @@ from app.connectors.cm_snmp import CmSnmpConnector
 from app.connectors.ipo_smdr import IpoSmdrConnector
 from app.connectors.ipo_snmp import IpoSnmpConnector
 from app.connectors.mock import MockConnector
+from app.connectors.sql_source import SqlSourceConnector
 
 
 def build_connectors() -> list[ProtocolConnector]:
@@ -17,4 +18,5 @@ def build_connectors() -> list[ProtocolConnector]:
         CmSnmpConnector(),
         IpoSmdrConnector(),
         IpoSnmpConnector(),
+        SqlSourceConnector(),
     ]

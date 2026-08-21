@@ -24,6 +24,7 @@ export function Header() {
           <Link to="/health" className="hover:text-primary transition-colors">Здоровье</Link>
           <Link to="/dialplan" className="hover:text-primary transition-colors">План нумерации</Link>
           <Link to="/logs" className="hover:text-primary transition-colors">Журналы</Link>
+          <Link to="/recordings" className="hover:text-primary transition-colors">Записи</Link>
         </nav>
       </div>
     </header>

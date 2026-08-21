@@ -3,6 +3,7 @@ import { Header } from './components/Header'
 import { DialplanPage } from './pages/DialplanPage'
 import { HealthPage } from './pages/HealthPage'
 import { LogsPage } from './pages/LogsPage'
+import { RecordingsPage } from './pages/RecordingsPage'
 
 function Home() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="/health" element={<HealthPage />} />
             <Route path="/dialplan" element={<DialplanPage />} />
             <Route path="/logs" element={<LogsPage />} />
+            <Route path="/recordings" element={<RecordingsPage />} />
           </Routes>
         </main>
       </div>

@@ -18,6 +18,7 @@ from app.services.cdr_repo import CdrRepository, SqlCdrRepository
 from app.services.health_ingest import ingest_health_fixtures
 from app.services.health_repo import HealthRepository
 from app.services.logs import ingest_log_fixtures
+from app.services.recordings import get_default_recordings_service
 
 router = APIRouter(tags=["cdr"])
 
@@ -42,6 +43,7 @@ class IngestResult(BaseModel):
     logs_sip: int = 0
     logs_e1: int = 0
     logs_alarm: int = 0
+    recordings: int = 0
 
 
 async def get_cdr_repo(
@@ -146,6 +148,8 @@ async def post_ingest_fixtures(
     health = await ingest_health_fixtures(health_repo)
     stats.update(health)
     stats.update(ingest_log_fixtures())
+    rec_svc = get_default_recordings_service()
+    stats["recordings"] = await rec_svc.load_fixtures()
     return stats
 
 
