@@ -17,6 +17,7 @@ from app.services.cdr_ingest import generate_mock_cdrs, ingest_fixtures
 from app.services.cdr_repo import CdrRepository, SqlCdrRepository
 from app.services.health_ingest import ingest_health_fixtures
 from app.services.health_repo import HealthRepository
+from app.services.logs import ingest_log_fixtures
 
 router = APIRouter(tags=["cdr"])
 
@@ -37,6 +38,10 @@ class IngestResult(BaseModel):
     nodes: int = 0
     snapshots: int = 0
     alarms: int = 0
+    logs: int = 0
+    logs_sip: int = 0
+    logs_e1: int = 0
+    logs_alarm: int = 0
 
 
 async def get_cdr_repo(
@@ -140,6 +145,7 @@ async def post_ingest_fixtures(
     stats = await ingest_fixtures(repo)
     health = await ingest_health_fixtures(health_repo)
     stats.update(health)
+    stats.update(ingest_log_fixtures())
     return stats
 
 

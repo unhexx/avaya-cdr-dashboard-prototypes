@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Header } from './components/Header'
 import { DialplanPage } from './pages/DialplanPage'
 import { HealthPage } from './pages/HealthPage'
+import { LogsPage } from './pages/LogsPage'
 
 function Home() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
             <Route path="/modern" element={<Placeholder title="Prototype 4: Modern Cards + Timeline" />} />
             <Route path="/health" element={<HealthPage />} />
             <Route path="/dialplan" element={<DialplanPage />} />
+            <Route path="/logs" element={<LogsPage />} />
           </Routes>
         </main>
       </div>

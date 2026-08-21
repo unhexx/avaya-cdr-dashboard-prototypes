@@ -23,6 +23,7 @@ export function Header() {
           <Link to="/modern" className="hover:text-primary transition-colors">Modern</Link>
           <Link to="/health" className="hover:text-primary transition-colors">Здоровье</Link>
           <Link to="/dialplan" className="hover:text-primary transition-colors">План нумерации</Link>
+          <Link to="/logs" className="hover:text-primary transition-colors">Журналы</Link>
         </nav>
       </div>
     </header>

@@ -11,6 +11,7 @@ from app.api.cdr import router as cdr_router
 from app.api.deps import optional_basic_auth
 from app.api.dialplan import router as dialplan_router
 from app.api.health import router as health_router
+from app.api.logs import router as logs_router
 from app.api.pbx import router as pbx_router
 from app.config import get_settings
 
@@ -48,6 +49,7 @@ def create_app() -> FastAPI:
     application.include_router(pbx_router, prefix="/api")
     application.include_router(cdr_router, prefix="/api")
     application.include_router(dialplan_router, prefix="/api")
+    application.include_router(logs_router, prefix="/api")
     application.state.settings = settings
     return application
 
