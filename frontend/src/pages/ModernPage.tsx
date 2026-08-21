@@ -10,6 +10,11 @@ import { useI18n } from '@/i18n'
 import type { CdrRecord } from '@/types/cdr'
 import { cn } from '@/lib/utils'
 
+/** Потолок клиентской выборки карточек (P6). */
+const SAMPLE_CEILING = 100
+/** Aquarius muted для незавершённых шагов таймлайна. */
+const AQUARIUS_MUTED = '#A2B7C8'
+
 export function ModernPage() {
   const { t } = useI18n()
   const [q, setQ] = useState('')
@@ -21,7 +26,7 @@ export function ModernPage() {
     error,
     reload,
     ingestFixtures,
-  } = useCdr({ page: 1, pageSize: 100 })
+  } = useCdr({ page: 1, pageSize: SAMPLE_CEILING })
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase()
@@ -63,6 +68,10 @@ export function ModernPage() {
         aria-label={t('common.search')}
       />
 
+      <p className="text-xs text-muted-foreground">
+        {t('common.sampleCeiling', { n: SAMPLE_CEILING })}
+      </p>
+
       {error ? (
         <p className="text-sm text-destructive" role="alert">
           {t('common.error')}{' '}
@@ -74,12 +83,24 @@ export function ModernPage() {
 
       {loading ? (
         <p className="text-muted-foreground">{t('common.loading')}</p>
-      ) : filtered.length === 0 ? (
+      ) : items.length === 0 ? (
         <Card>
           <CardHeader>
             <CardTitle>{t('common.empty')}</CardTitle>
             <CardDescription>{t('common.emptyHint')}</CardDescription>
           </CardHeader>
+        </Card>
+      ) : filtered.length === 0 ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('common.filterMiss')}</CardTitle>
+            <CardDescription>{t('common.filterMissHint')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button variant="secondary" onClick={() => setQ('')}>
+              {t('common.clearSearch')}
+            </Button>
+          </CardContent>
         </Card>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
@@ -191,7 +212,8 @@ function Timeline({ record }: { record: CdrRecord }) {
             <span
               className="w-3 h-3 rounded-full shrink-0"
               style={{
-                backgroundColor: s.done ? s.color : '#e5e7eb',
+                backgroundColor: s.done ? s.color : AQUARIUS_MUTED,
+                opacity: s.done ? 1 : 0.45,
               }}
             />
             {idx < steps.length - 1 ? (

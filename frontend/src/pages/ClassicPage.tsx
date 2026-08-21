@@ -227,7 +227,7 @@ export function ClassicPage() {
                 setPageSize(Number(e.target.value))
                 setPage(1)
               }}
-              aria-label="page size"
+              aria-label={t('common.pageSize')}
             >
               {[10, 25, 50, 100, 500].map((n) => (
                 <option key={n} value={n}>

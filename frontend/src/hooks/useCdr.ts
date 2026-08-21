@@ -1,7 +1,7 @@
 /**
- * Загрузка страницы CDR и stats; общая кнопка ingest фикстур.
+ * Загрузка страницы CDR и stats; AbortController отменяет устаревшие запросы.
  */
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CdrPage, CdrRecord, CdrStats } from '@/types/cdr'
 
 export type UseCdrOptions = {
@@ -23,8 +23,13 @@ export function useCdr(options: UseCdrOptions = {}) {
   const [loading, setLoading] = useState(true)
   const [ingesting, setIngesting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
   const load = useCallback(async () => {
+    abortRef.current?.abort()
+    const ac = new AbortController()
+    abortRef.current = ac
+
     setLoading(true)
     setError(null)
     try {
@@ -34,13 +39,17 @@ export function useCdr(options: UseCdrOptions = {}) {
         sort: '-start_time',
       })
       if (q.trim()) params.set('q', q.trim())
-      const cdrRes = await fetch(`/api/cdr?${params.toString()}`)
+      const cdrRes = await fetch(`/api/cdr?${params.toString()}`, {
+        signal: ac.signal,
+      })
       if (!cdrRes.ok) throw new Error(`cdr ${cdrRes.status}`)
       const cdrJson = (await cdrRes.json()) as CdrPage
+      if (ac.signal.aborted) return
       setData(cdrJson)
 
       if (withStats) {
-        const statsRes = await fetch('/api/stats')
+        const statsRes = await fetch('/api/stats', { signal: ac.signal })
+        if (ac.signal.aborted) return
         if (statsRes.ok) {
           setStats((await statsRes.json()) as CdrStats)
         } else {
@@ -50,16 +59,20 @@ export function useCdr(options: UseCdrOptions = {}) {
           })
         }
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return
       setError('api')
-      setData(null)
+      // Не затираем последний удачный data при сбое — оставляем предыдущую выборку.
     } finally {
-      setLoading(false)
+      if (!ac.signal.aborted) setLoading(false)
     }
   }, [page, pageSize, q, withStats])
 
   useEffect(() => {
     void load()
+    return () => {
+      abortRef.current?.abort()
+    }
   }, [load])
 
   const ingestFixtures = useCallback(async () => {

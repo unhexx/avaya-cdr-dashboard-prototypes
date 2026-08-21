@@ -25,7 +25,12 @@
     "next": "Next",
     "search": "Search",
     "export": "Export",
-    "language": "Language"
+    "language": "Language",
+    "pageSize": "Page size",
+    "filterMiss": "Nothing matched",
+    "filterMissHint": "Change or clear the search query.",
+    "clearSearch": "Clear search",
+    "sampleCeiling": "Showing up to {n} sampled records; KPIs/charts use this sample."
   },
   "cdr": {
     "startTime": "Start",
@@ -55,7 +60,7 @@
   },
   "classic": {
     "title": "Classic CDR table",
-    "subtitle": "Paginated table backed by GET /api/cdr"
+    "subtitle": "Server-paginated table backed by GET /api/cdr"
   },
   "analytics": {
     "title": "Analytics",
@@ -66,7 +71,8 @@
     "avgRing": "Avg ring",
     "uniqueAgents": "Unique agents",
     "byHour": "Volume by hour",
-    "byDirection": "By direction"
+    "byDirection": "By direction",
+    "sample": "Sample"
   },
   "cc": {
     "title": "Contact center",

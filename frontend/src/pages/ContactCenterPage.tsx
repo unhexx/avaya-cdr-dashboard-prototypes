@@ -9,6 +9,9 @@ import { formatDuration, useCdr } from '@/hooks/useCdr'
 import { useI18n } from '@/i18n'
 import { SLA_THRESHOLD_SECONDS } from '@/types/cdr'
 
+/** Потолок клиентской выборки для SLA/агентов/VDN (P6). */
+const SAMPLE_CEILING = 500
+
 type AgentRow = {
   agent: string
   handled: number
@@ -34,7 +37,7 @@ export function ContactCenterPage() {
     error,
     reload,
     ingestFixtures,
-  } = useCdr({ page: 1, pageSize: 500 })
+  } = useCdr({ page: 1, pageSize: SAMPLE_CEILING })
 
   const slaPct = useMemo(() => {
     const inboundish = items.filter(
@@ -77,20 +80,37 @@ export function ContactCenterPage() {
   }, [items])
 
   const vdns = useMemo(() => {
+    // slaOffered = inboundish (answered|abandoned|no_answer) — как у карточки SLA сверху
     const map = new Map<
       string,
-      { total: number; answered: number; abandoned: number; slaOk: number }
+      {
+        total: number
+        answered: number
+        abandoned: number
+        slaOk: number
+        slaOffered: number
+      }
     >()
     for (const row of items) {
       const v = row.vdn
       if (!v) continue
-      const cur = map.get(v) ?? { total: 0, answered: 0, abandoned: 0, slaOk: 0 }
+      const cur = map.get(v) ?? {
+        total: 0,
+        answered: 0,
+        abandoned: 0,
+        slaOk: 0,
+        slaOffered: 0,
+      }
       cur.total += 1
-      if (row.disposition === 'answered') {
+      const d = row.disposition
+      const inboundish =
+        d === 'answered' || d === 'abandoned' || d === 'no_answer'
+      if (inboundish) cur.slaOffered += 1
+      if (d === 'answered') {
         cur.answered += 1
         if ((row.ring_duration_seconds ?? 99) <= SLA_THRESHOLD_SECONDS) cur.slaOk += 1
       }
-      if (row.disposition === 'abandoned') cur.abandoned += 1
+      if (d === 'abandoned') cur.abandoned += 1
       map.set(v, cur)
     }
     const rows: VdnRow[] = Array.from(map.entries()).map(([vdn, v]) => ({
@@ -99,7 +119,9 @@ export function ContactCenterPage() {
       answered: v.answered,
       abandoned: v.abandoned,
       abandonPct: v.total ? Math.round((v.abandoned / v.total) * 1000) / 10 : 0,
-      slaPct: v.total ? Math.round((v.slaOk / v.total) * 1000) / 10 : 0,
+      slaPct: v.slaOffered
+        ? Math.round((v.slaOk / v.slaOffered) * 1000) / 10
+        : 0,
     }))
     rows.sort((a, b) => b.total - a.total)
     return rows
@@ -137,6 +159,9 @@ export function ContactCenterPage() {
         </Card>
       ) : (
         <>
+          <p className="text-xs text-muted-foreground">
+            {t('common.sampleCeiling', { n: SAMPLE_CEILING })}
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">

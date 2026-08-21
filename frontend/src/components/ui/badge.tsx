@@ -11,9 +11,10 @@ const badgeVariants = cva(
         secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        answered: "border-transparent bg-emerald-500 text-white",
-        abandoned: "border-transparent bg-red-500 text-white",
-        busy: "border-transparent bg-amber-500 text-white",
+        /* Aquarius semantic fills (не emerald/red/amber) */
+        answered: "border-transparent bg-[#28AFCA] text-white",
+        abandoned: "border-transparent bg-[#24566C] text-white",
+        busy: "border-transparent bg-[#A2B7C8] text-[#24566C]",
         other: "border-transparent bg-muted text-muted-foreground",
       },
     },

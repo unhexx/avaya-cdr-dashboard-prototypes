@@ -20,6 +20,8 @@ import { cdrLabel, formatDuration, useCdr } from '@/hooks/useCdr'
 import { useI18n } from '@/i18n'
 
 const AQUARIUS = ['#28AFCA', '#A2B7C8', '#24566C', '#5ec8dc', '#7a9aab']
+/** Потолок клиентской выборки для KPI/графиков (P6). */
+const SAMPLE_CEILING = 500
 
 export function AnalyticsPage() {
   const { t } = useI18n()
@@ -33,7 +35,7 @@ export function AnalyticsPage() {
     error,
     reload,
     ingestFixtures,
-  } = useCdr({ page: 1, pageSize: 500, withStats: true })
+  } = useCdr({ page: 1, pageSize: SAMPLE_CEILING, withStats: true })
 
   const kpis = useMemo(() => {
     const answered = items.filter((i) => i.disposition === 'answered').length
@@ -132,8 +134,12 @@ export function AnalyticsPage() {
               value={formatDuration(kpis.avgRing)}
             />
             <Kpi label={t('analytics.uniqueAgents')} value={String(kpis.agents)} />
-            <Kpi label="sample" value={String(items.length)} />
+            <Kpi label={t('analytics.sample')} value={String(items.length)} />
           </div>
+
+          <p className="text-xs text-muted-foreground">
+            {t('common.sampleCeiling', { n: SAMPLE_CEILING })}
+          </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>
