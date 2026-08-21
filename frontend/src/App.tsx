@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Header } from './components/Header'
+import { HealthPage } from './pages/HealthPage'
 
 function Home() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="/analytics" element={<Placeholder title="Prototype 2: Analytics Dashboard" />} />
             <Route path="/contact-center" element={<Placeholder title="Prototype 3: Contact Center Focus" />} />
             <Route path="/modern" element={<Placeholder title="Prototype 4: Modern Cards + Timeline" />} />
+            <Route path="/health" element={<HealthPage />} />
           </Routes>
         </main>
       </div>

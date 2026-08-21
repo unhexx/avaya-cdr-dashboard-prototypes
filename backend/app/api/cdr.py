@@ -11,9 +11,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.pbx import get_health_repo
 from app.db import get_session
 from app.services.cdr_ingest import generate_mock_cdrs, ingest_fixtures
 from app.services.cdr_repo import CdrRepository, SqlCdrRepository
+from app.services.health_ingest import ingest_health_fixtures
+from app.services.health_repo import HealthRepository
 
 router = APIRouter(tags=["cdr"])
 
@@ -31,6 +34,9 @@ class IngestResult(BaseModel):
     skipped: int
     total: int
     parsed: int = 0
+    nodes: int = 0
+    snapshots: int = 0
+    alarms: int = 0
 
 
 async def get_cdr_repo(
@@ -129,8 +135,12 @@ async def cdr_stats(repo: Annotated[CdrRepository, Depends(get_cdr_repo)]) -> di
 @router.post("/ingest/fixtures", response_model=IngestResult)
 async def post_ingest_fixtures(
     repo: Annotated[CdrRepository, Depends(get_cdr_repo)],
+    health_repo: Annotated[HealthRepository, Depends(get_health_repo)],
 ) -> dict[str, int]:
-    return await ingest_fixtures(repo)
+    stats = await ingest_fixtures(repo)
+    health = await ingest_health_fixtures(health_repo)
+    stats.update(health)
+    return stats
 
 
 @router.post("/mock-generate", response_model=IngestResult)

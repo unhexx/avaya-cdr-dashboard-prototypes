@@ -1,16 +1,16 @@
 # STATUS
 
-**Phase:** P1 CDR ingest  
+**Phase:** P2 Health  
 **Branch target:** `main`  
-**Stop-met:** no (health/dialplan/logs/recordings/UI ACCEPTANCE remain)
+**Stop-met:** no (dialplan/logs/recordings/UI ACCEPTANCE remain)
 
 ## Last fire
 
-P1: parsers CM unformatted/expanded/customized + IPO SMDR; `POST /api/ingest/fixtures`; `GET /api/cdr` + detail + CSV/JSON export; mock-generate. Tests on in-memory repo + golden fixtures.
+P2: SAT parsers (`status health`, `display alarms`, `status ds1`); mock + SNMP stubs; `GET /api/pbx`, `/api/pbx/{id}/health`, `/api/alarms`; ingest SAT into snapshots/alarms; `/health` UI (Aquarius).
 
 ## Next slice
 
-**P2 Health** — snapshots, alarms, mock SAT, `/health` UI (Aquarius tokens).
+**P3 Dialplan** — ARS + IPO shortcodes, `GET /api/dialplan`, `/dialplan` UI.
 
 ## Blockers
 

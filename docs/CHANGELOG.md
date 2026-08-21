@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.5.0 — 2026-08-21
+
+### Added
+
+- SAT parsers for `status health`, `display alarms`, `status ds1` (read-only allowlist).
+- Mock / CM SAT / CM SNMP / IPO SNMP connectors (`poll_health`; live SNMP skipped).
+- `GET /api/pbx`, `GET /api/pbx/{id}/health`, `GET /api/alarms`.
+- Fixture ingest seeds four nodes, SAT snapshot, open alarms.
+- `/health` SPA page (Aquarius tokens, Russian copy).
+
 ## 0.4.0 — 2026-08-21
 
 ### Added

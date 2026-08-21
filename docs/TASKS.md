@@ -6,7 +6,7 @@ INVEST backlog. Execution copy with checkboxes: `.agent/TODO.md`.
 
 - Root agent files, docs index v2.0, ADRs 0001–0011, fixtures, `.agent/*`, Shields README.
 
-## P0 — Scaffold (this fire)
+## P0 — Scaffold (done)
 
 - `backend/` FastAPI app, Pydantic settings, `/api/health`
 - `docker-compose.yml` postgres + api + web
@@ -21,7 +21,7 @@ INVEST backlog. Execution copy with checkboxes: `.agent/TODO.md`.
 - `GET /api/cdr`, detail, export CSV/JSON, mock-generate
 - Dedup on `raw_hash`
 
-## P2 — Health
+## P2 — Health (this fire)
 
 - `pbx_nodes`, snapshots, alarms
 - Mock health from SAT fixture text

@@ -12,9 +12,13 @@ Land the complete docs package on `origin/main`. No application code.
 
 FastAPI + compose + Alembic + `/api/health`.
 
-## Phase P1+ 
+## Phase P2 Health (this fire)
 
-Parsers → health → dialplan → logs → recordings → UI → harden. One INVEST per fire. See `docs/TASKS.md` and `.agent/TODO.md`.
+SAT mock snapshots, alarms, SNMP stubs, `/health` UI.
+
+## Phase P3+
+
+Dialplan → logs → recordings → UI → harden. One INVEST per fire. See `docs/TASKS.md` and `.agent/TODO.md`.
 
 ## Risks
 

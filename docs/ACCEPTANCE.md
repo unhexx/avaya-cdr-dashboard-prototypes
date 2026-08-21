@@ -19,12 +19,12 @@ All boxes must be true on `origin/main` for STOP=DONE.
 - [ ] `POST /api/ingest/fixtures` loads CDR, logs, dialplan, recordings meta
 - [x] `GET /api/cdr` filters, paginates, returns `raw_record` on detail
 - [x] `GET /api/export?format=csv` downloads
-- [ ] `GET /api/pbx` and `/api/pbx/{id}/health` from mock
+- [x] `GET /api/pbx` and `/api/pbx/{id}/health` from mock
 - [ ] `GET /api/dialplan` returns fixture ARS/IPO rows
 - [ ] `GET /api/logs?kind=sip` and `kind=e1` return fixture lines
 - [ ] Unencrypted `GET /api/recordings/{id}/audio` is 200 audio
 - [ ] Encrypted IPO fixture audio is **409** with `reason=ipo_encrypted_r11`
-- [ ] No SysMonitor client in the tree (`rg -i sysmonitor` only hits docs forbidding it)
+- [x] No SysMonitor client in the tree (`rg -i sysmonitor` only hits docs forbidding it)
 
 ## UI
 
@@ -35,10 +35,10 @@ All boxes must be true on `origin/main` for STOP=DONE.
 
 ## Quality
 
-- [ ] `pytest` green with `USE_FIXTURES=true` and no live hosts
+- [x] `pytest` green with `USE_FIXTURES=true` and no live hosts
 - [ ] Frontend unit tests green
-- [ ] ruff + mypy (backend) clean on the slice that introduced code
-- [ ] Identifiers English; new comments Russian
+- [x] ruff + mypy (backend) clean on the slice that introduced code
+- [x] Identifiers English; new comments Russian
 - [ ] No `.env`, no customer audio, no real numbers
 
 ## Git

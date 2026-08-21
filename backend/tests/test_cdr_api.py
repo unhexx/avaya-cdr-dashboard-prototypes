@@ -6,20 +6,27 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.api.cdr import get_cdr_repo
+from app.api.pbx import get_health_repo
 from app.main import create_app
 from app.services.cdr_ingest import generate_mock_cdrs, load_fixture_cdrs
 from app.services.cdr_repo import InMemoryCdrRepository
+from app.services.health_repo import InMemoryHealthRepository
 
 
 @pytest.fixture
 def api() -> Iterator[tuple[TestClient, InMemoryCdrRepository]]:
     repo = InMemoryCdrRepository()
+    health = InMemoryHealthRepository()
     application = create_app()
 
     async def _override() -> InMemoryCdrRepository:
         return repo
 
+    async def _health() -> InMemoryHealthRepository:
+        return health
+
     application.dependency_overrides[get_cdr_repo] = _override
+    application.dependency_overrides[get_health_repo] = _health
     with TestClient(application) as client:
         yield client, repo
 
