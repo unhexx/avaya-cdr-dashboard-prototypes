@@ -44,7 +44,7 @@ async def list_dialplan(
     q: Annotated[str, Query(description="Номер для longest-prefix")] = "",
     source: Annotated[
         str | None,
-        Query(description="ars | dialplan | ipo_shortcode | ipo_ars"),
+        Query(description="ars | dialplan_analysis | ipo_shortcode | ipo_ars"),
     ] = None,
 ) -> dict[str, Any]:
     items = await repo.list_entries(q=q, source=source)

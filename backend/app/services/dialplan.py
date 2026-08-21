@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
@@ -15,6 +16,42 @@ from app.parsers.dialplan_ipo import IpoShortcodeRow, parse_ipo_shortcodes_csv
 from app.services.cdr_ingest import find_fixtures_root
 
 FIXTURE_SYNCED_AT = datetime(2026, 8, 21, 8, 0, tzinfo=UTC)
+
+# Колонки DialplanEntry ORM / DATA_MODEL (без call_type / node_number — их нет в схеме).
+_ORM_FIELDS = frozenset(
+    {
+        "pbx_node_id",
+        "source",
+        "match_prefix",
+        "min_digits",
+        "max_digits",
+        "route",
+        "location",
+        "raw",
+        "synced_at",
+    }
+)
+
+# Однострочный ARS raw → call_type / node_number (не колонки ORM).
+_ARS_RAW_RE = re.compile(
+    r"^(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\S+)(?:\s+(\S+))?\s*$"
+)
+
+
+def orm_kwargs_from_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Оставить только поля модели; call_type/node_number и прочее отбрасываются."""
+    return {k: v for k, v in row.items() if k in _ORM_FIELDS}
+
+
+def _recover_ars_extras(raw: str | None) -> dict[str, Any]:
+    """Достать call_type / node_number из сырой строки ARS (не хранятся в ORM)."""
+    if not raw:
+        return {}
+    match = _ARS_RAW_RE.match(raw.strip())
+    if not match:
+        return {}
+    _prefix, _amin, _amax, _route, call_type, node = match.groups()
+    return {"call_type": call_type, "node_number": node}
 
 
 def _row_out(entry: dict[str, Any]) -> dict[str, Any]:
@@ -36,8 +73,28 @@ def _row_out(entry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _entry_from_orm(obj: DialplanEntry) -> dict[str, Any]:
+    """ORM → API dict; call_type/node_number через getattr + recover из raw для ARS."""
+    data: dict[str, Any] = {
+        "id": obj.id,
+        "source": obj.source,
+        "match_prefix": obj.match_prefix,
+        "min_digits": obj.min_digits,
+        "max_digits": obj.max_digits,
+        "route": obj.route,
+        "call_type": getattr(obj, "call_type", None),
+        "node_number": getattr(obj, "node_number", None),
+        "location": obj.location,
+        "raw": obj.raw,
+        "synced_at": obj.synced_at,
+    }
+    if data["call_type"] is None and data["source"] == "ars":
+        data.update(_recover_ars_extras(obj.raw))
+    return data
+
+
 def load_fixture_dialplan(root: Path | None = None) -> list[dict[str, Any]]:
-    """ARS + IPO shortcodes из docs/fixtures → словари под DialplanEntry."""
+    """ARS + IPO shortcodes из docs/fixtures → словари (API + ORM-совместимые)."""
     base = root or find_fixtures_root()
     rows: list[dict[str, Any]] = []
 
@@ -70,6 +127,7 @@ def _ars_to_dict(item: ArsRow) -> dict[str, Any]:
 
 
 def _ipo_to_dict(item: IpoShortcodeRow) -> dict[str, Any]:
+    # call_type/node_number — поля ARS; у IPO feature/telephone остаются в route и raw (нет колонок ORM).
     route = item.feature
     if item.line_group:
         route = f"{item.feature}:{item.line_group}" if item.feature else item.line_group
@@ -79,8 +137,8 @@ def _ipo_to_dict(item: IpoShortcodeRow) -> dict[str, Any]:
         "min_digits": None,
         "max_digits": None,
         "route": route,
-        "call_type": item.feature,
-        "node_number": item.telephone_number,
+        "call_type": None,
+        "node_number": None,
         "location": None,
         "raw": item.raw,
         "synced_at": FIXTURE_SYNCED_AT,
@@ -124,7 +182,7 @@ class SqlDialplanRepository:
         await self._session.execute(delete(DialplanEntry))
         inserted = 0
         for row in rows:
-            self._session.add(DialplanEntry(**{k: v for k, v in row.items() if k != "id"}))
+            self._session.add(DialplanEntry(**orm_kwargs_from_row(row)))
             inserted += 1
         await self._session.commit()
         return {"inserted": inserted, "total": inserted}
@@ -136,22 +194,7 @@ class SqlDialplanRepository:
         if source:
             stmt = stmt.where(DialplanEntry.source == source)
         result = await self._session.execute(stmt)
-        items = [
-            {
-                "id": obj.id,
-                "source": obj.source,
-                "match_prefix": obj.match_prefix,
-                "min_digits": obj.min_digits,
-                "max_digits": obj.max_digits,
-                "route": obj.route,
-                "call_type": obj.call_type,
-                "node_number": obj.node_number,
-                "location": obj.location,
-                "raw": obj.raw,
-                "synced_at": obj.synced_at,
-            }
-            for obj in result.scalars().all()
-        ]
+        items = [_entry_from_orm(obj) for obj in result.scalars().all()]
         return [_row_out(e) for e in longest_prefix_match(items, q, source=None)]
 
 

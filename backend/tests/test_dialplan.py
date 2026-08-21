@@ -12,6 +12,7 @@ from app.api.cdr import get_cdr_repo
 from app.api.dialplan import get_dialplan_repo
 from app.api.pbx import get_health_repo
 from app.main import create_app
+from app.models.dialplan import DialplanEntry
 from app.parsers.dialplan_ars import parse_list_ars_analysis
 from app.parsers.dialplan_ipo import parse_ipo_shortcodes_csv
 from app.services.cdr_repo import InMemoryCdrRepository
@@ -19,6 +20,7 @@ from app.services.dialplan import (
     InMemoryDialplanRepository,
     load_fixture_dialplan,
     longest_prefix_match,
+    orm_kwargs_from_row,
 )
 from app.services.health_repo import InMemoryHealthRepository
 
@@ -73,6 +75,12 @@ def test_parse_ipo_shortcodes() -> None:
     assert by_prefix["12"].feature == "DialExtn"
     assert by_prefix["*17"].feature == "CallPickupAny"
     assert by_prefix["3001"].telephone_number == "3001"
+    # Z-wildcard и отсутствие пробела в классе (Issue 7)
+    z_rows = parse_ipo_shortcodes_csv(
+        "Short Code,Telephone Number,Feature,Line Group\n"
+        "5NZ,N,Dial,1\n"
+    )
+    assert z_rows[0].match_prefix == "5"
 
 
 def test_longest_prefix_order() -> None:
@@ -96,6 +104,26 @@ def test_load_fixtures_combined() -> None:
     assert "ars" in sources
     assert "ipo_shortcode" in sources
     assert len(rows) >= 11
+    # IPO: feature/telephone только в route/raw, не в call_type/node_number
+    ipo = [r for r in rows if r["source"] == "ipo_shortcode"]
+    assert ipo
+    assert all(r.get("call_type") is None and r.get("node_number") is None for r in ipo)
+    assert any(r.get("route") for r in ipo)
+
+
+def test_dialplan_entry_from_fixture_rows() -> None:
+    """ORM принимает только колонки схемы — strip call_type/node_number (Issues 1–2)."""
+    rows = load_fixture_dialplan(FIXTURES)
+    assert rows
+    for row in rows:
+        kwargs = orm_kwargs_from_row(row)
+        assert "call_type" not in kwargs
+        assert "node_number" not in kwargs
+        entry = DialplanEntry(**kwargs)
+        assert entry.match_prefix == row["match_prefix"]
+        assert entry.source == row["source"]
+        assert entry.raw == row["raw"]
+        assert not hasattr(entry, "call_type")
 
 
 def test_sync_and_search_api(api: tuple[TestClient, InMemoryDialplanRepository]) -> None:

@@ -19,7 +19,7 @@ class IpoShortcodeRow:
     raw: str
 
 
-_WILDCARD_TRAIL = re.compile(r"[NXn x.]+$")
+_WILDCARD_TRAIL = re.compile(r"[NXnZx.z]+$")
 
 
 def _prefix_from_short_code(short_code: str) -> str:

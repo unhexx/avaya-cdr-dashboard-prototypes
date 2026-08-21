@@ -8,7 +8,7 @@ v1 is a **searchable dump**, not a live digit-by-digit analyzer (ADR 0009). Refr
 |---|---|---|
 | `ars` | CM `list ars analysis` | prefix, min/max, route-pattern |
 | `dialplan_analysis` | CM `display dialplan analysis` | percent-len, first-digit-type |
-| `ipo_shortcode` | IPO SSA or fixture | short-code, telephone-number, feature |
+| `ipo_shortcode` | IPO SSA or fixture | short-code → match_prefix; feature/line-group → route; telephone stays in `raw` (not `node_number`) |
 | `ipo_ars` | IPO ARS table dump | prefix, dest |
 
 ## Operator flow

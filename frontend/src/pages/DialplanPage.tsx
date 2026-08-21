@@ -19,18 +19,26 @@ type DialplanEntry = {
 
 const SOURCE_LABEL: Record<string, string> = {
   ars: 'ARS (CM)',
-  dialplan: 'Dialplan analysis',
+  dialplan_analysis: 'Dialplan analysis',
   ipo_shortcode: 'IPO short code',
   ipo_ars: 'IPO ARS',
 }
 
+const DEBOUNCE_MS = 250
+
 export function DialplanPage() {
   const [items, setItems] = useState<DialplanEntry[]>([])
   const [q, setQ] = useState('')
+  const [debouncedQ, setDebouncedQ] = useState('')
   const [source, setSource] = useState('')
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedQ(q), DEBOUNCE_MS)
+    return () => window.clearTimeout(timer)
+  }, [q])
 
   const load = useCallback(async (query: string, src: string) => {
     setLoading(true)
@@ -51,8 +59,8 @@ export function DialplanPage() {
   }, [])
 
   useEffect(() => {
-    void load(q, source)
-  }, [load, q, source])
+    void load(debouncedQ, source)
+  }, [load, debouncedQ, source])
 
   async function syncFixtures() {
     setSyncing(true)
@@ -60,7 +68,7 @@ export function DialplanPage() {
     try {
       const res = await fetch('/api/dialplan/sync', { method: 'POST' })
       if (!res.ok) throw new Error(String(res.status))
-      await load(q, source)
+      await load(debouncedQ, source)
     } catch {
       setError('Не удалось синхронизировать фикстуры ARS/IPO.')
     } finally {
@@ -106,7 +114,9 @@ export function DialplanPage() {
           >
             <option value="">Все источники</option>
             <option value="ars">ARS (CM)</option>
+            <option value="dialplan_analysis">Dialplan analysis</option>
             <option value="ipo_shortcode">IPO short code</option>
+            <option value="ipo_ars">IPO ARS</option>
           </select>
         </CardContent>
       </Card>
@@ -141,7 +151,8 @@ export function DialplanPage() {
                     <th className="py-2 pr-3 font-medium">Маршрут</th>
                     <th className="py-2 pr-3 font-medium">Тип</th>
                     <th className="py-2 pr-3 font-medium">Узел / номер</th>
-                    <th className="py-2 font-medium">Локация</th>
+                    <th className="py-2 pr-3 font-medium">Локация</th>
+                    <th className="py-2 font-medium">Raw</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,7 +172,13 @@ export function DialplanPage() {
                       <td className="py-2 pr-3 font-mono text-xs">{row.route ?? '—'}</td>
                       <td className="py-2 pr-3">{row.call_type ?? '—'}</td>
                       <td className="py-2 pr-3 font-mono text-xs">{row.node_number ?? '—'}</td>
-                      <td className="py-2 text-muted-foreground">{row.location ?? '—'}</td>
+                      <td className="py-2 pr-3 text-muted-foreground">{row.location ?? '—'}</td>
+                      <td
+                        className="py-2 font-mono text-xs text-muted-foreground max-w-[14rem] truncate"
+                        title={row.raw ?? undefined}
+                      >
+                        {row.raw ?? '—'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
