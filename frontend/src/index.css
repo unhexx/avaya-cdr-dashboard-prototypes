@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 198 50% 28%;
+    --card: 0 0% 100%;
+    --card-foreground: 198 50% 28%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 198 50% 28%;
+    --primary: 190 67% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 207 26% 71%;
+    --secondary-foreground: 198 50% 28%;
+    --muted: 207 26% 92%;
+    --muted-foreground: 198 30% 40%;
+    --accent: 190 67% 47%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 207 26% 85%;
+    --input: 207 26% 85%;
+    --ring: 190 67% 47%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 198 50% 12%;
+    --foreground: 207 26% 90%;
+    --card: 198 50% 15%;
+    --card-foreground: 207 26% 90%;
+    --popover: 198 50% 15%;
+    --popover-foreground: 207 26% 90%;
+    --primary: 190 67% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 198 40% 25%;
+    --secondary-foreground: 207 26% 90%;
+    --muted: 198 40% 20%;
+    --muted-foreground: 207 20% 70%;
+    --accent: 190 67% 47%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 198 40% 25%;
+    --input: 198 40% 25%;
+    --ring: 190 67% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
