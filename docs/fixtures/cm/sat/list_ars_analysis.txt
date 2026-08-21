@@ -1,0 +1,16 @@
+status 1
+                                 ARS ANALYSIS
+
+               Location: 1                Time Zone: 0
+
+               Dialed  Total      Route        Call Type    Node
+               String  Min Max    Pattern                   Number
+
+               8         8   8    1            hnpa
+               9         1  24    2            op
+               810      11  11    5            intl
+               3         4   4    8            ext
+               12        4   4    8            ext
+               300       4   4    9            vdn
+
+Command successfully completed

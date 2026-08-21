@@ -1,0 +1,7 @@
+<131>Aug 21 14:10:00 medpro-01 DS1 01A0517 LOS detected
+<134>Aug 21 14:10:08 medpro-01 DS1 01A0517 LOS cleared
+<132>Aug 21 14:22:11 medpro-01 DS1 01A0517 RAI yellow alarm
+<134>Aug 21 14:22:40 medpro-01 DS1 01A0517 RAI cleared
+<131>Aug 21 15:01:00 medpro-01 DS1 01A0518 AIS blue alarm
+<134>Aug 21 15:01:12 medpro-01 DS1 01A0518 AIS cleared
+<132>Aug 21 16:00:00 medpro-01 DS1 01A0517 SLIP count=3 CRC=12 BPV=0

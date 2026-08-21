@@ -1,0 +1,8 @@
+<134>1 2026-08-21T14:30:02.100Z session-manager-01 sip - - - INVITE sip:1205@avaya.local SIP/2.0 Call-ID: c7f1abcd@sm.local From: <sip:79031234567@pstn.local> CSeq: 1 INVITE
+<134>1 2026-08-21T14:30:02.140Z session-manager-01 sip - - - SIP/2.0 100 Trying Call-ID: c7f1abcd@sm.local
+<134>1 2026-08-21T14:30:02.180Z session-manager-01 sip - - - SIP/2.0 180 Ringing Call-ID: c7f1abcd@sm.local
+<134>1 2026-08-21T14:30:14.010Z session-manager-01 sip - - - SIP/2.0 200 OK Call-ID: c7f1abcd@sm.local
+<134>1 2026-08-21T14:31:37.000Z session-manager-01 sip - - - BYE sip:1205@avaya.local SIP/2.0 Call-ID: c7f1abcd@sm.local
+<134>1 2026-08-21T14:31:10.200Z sbce-01 SIP: INVITE sip:84951234001@itsp.example SIP/2.0 Call-ID: out-10003@sbce.local CSeq: 1 INVITE
+<132>1 2026-08-21T14:44:22.000Z session-manager-01 sip - - - SIP/2.0 486 Busy Here Call-ID: busy-10010@sm.local
+<131>1 2026-08-21T14:45:01.000Z session-manager-01 sip - - - SIP/2.0 503 Service Unavailable Call-ID: fail-10011@sm.local

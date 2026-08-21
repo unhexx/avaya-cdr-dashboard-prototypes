@@ -1,0 +1,13 @@
+status health
+                              SYSTEM HEALTH
+
+  Test                         Result
+  Processor Occupancy          12%
+  Idle CPU                     84%
+  System Management            up
+  Last Reload                  2026-08-01 04:12
+  Alarms Major                 0
+  Alarms Minor                 1
+  Alarms Warning               2
+
+Command successfully completed

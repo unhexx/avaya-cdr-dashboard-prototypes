@@ -1,0 +1,8 @@
+display alarms
+                                 ALARM REPORT
+
+  Port      Alt Name    OnBd?  Type      Svc State  Alarms
+  01A0517               y      ds1       in-service warning  slip-history
+  MEDPRO    ip-board    y      medpro    in-service minor    high-occupancy
+
+Command successfully completed

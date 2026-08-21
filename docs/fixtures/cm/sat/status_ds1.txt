@@ -1,0 +1,13 @@
+status ds1 01A0517
+                              DS1 LINK STATUS
+
+  Location: 01A0517
+  Alarms: none
+  Slip Count: 0
+  Misframe Count: 0
+  Code: hdb3
+  Framing: crc4
+  Signaling: isdn-pri
+  Port Network: 1
+
+Command successfully completed

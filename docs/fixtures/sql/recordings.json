@@ -1,0 +1,40 @@
+{
+  "recordings": [
+    {
+      "sql_source_id": "rec-001",
+      "ucid": "00001001234567890123",
+      "start_time": "2026-08-21T14:30:02Z",
+      "duration_seconds": 83,
+      "calling_number": "79031234567",
+      "dialed_number": "1205",
+      "filename": "placeholder-unencrypted.wav",
+      "mime_type": "audio/wav",
+      "encrypted": false,
+      "encryption_hint": "none"
+    },
+    {
+      "sql_source_id": "rec-002",
+      "ucid": "00001001234567890125",
+      "start_time": "2026-08-21T14:32:00Z",
+      "duration_seconds": 45,
+      "calling_number": "1206",
+      "dialed_number": "84951234001",
+      "filename": "call-00001001234567890125.enc",
+      "mime_type": "application/octet-stream",
+      "encrypted": true,
+      "encryption_hint": "ipo_r11"
+    },
+    {
+      "sql_source_id": "rec-003",
+      "ucid": "00001001234567890126",
+      "start_time": "2026-08-21T14:35:00Z",
+      "duration_seconds": 130,
+      "calling_number": "79031234567",
+      "dialed_number": "3001",
+      "filename": "call-00001001234567890126.enc",
+      "mime_type": "application/octet-stream",
+      "encrypted": true,
+      "encryption_hint": "ipo_r11"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+display dialplan analysis
+                          DIAL PLAN ANALYSIS TABLE
+
+     Dialed  Total   Call     Node
+     String  Length  Type     Number
+
+     0         1     fac
+     1         4     ext
+     2         4     ext
+     3         4     ext
+     8         8     dac
+     9        24     dac
+     *         3     fac
+     #         4     fac
+
+Command successfully completed

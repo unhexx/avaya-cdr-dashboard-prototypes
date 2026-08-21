@@ -1,0 +1,6 @@
+Short Code,Telephone Number,Feature,Line Group
+9N,N,Dial,7
+8N,N,Dial,8
+*17,.,CallPickupAny,0
+3001,3001,VoicemailCollect,0
+12XX,12XX,DialExtn,0
