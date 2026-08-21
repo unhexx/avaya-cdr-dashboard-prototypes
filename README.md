@@ -15,8 +15,6 @@ Operations dashboard for Avaya voice platforms: **PBX health**, **CDR / SMDR**, 
 
 First release targets maximum compatibility with Communication Manager, IP Office, Session Manager and SBCE using **official interfaces only**. Encrypted IP Office recordings (typical ≥ R11.1) are metadata-only (HTTP 409). CI runs on fixtures — a live PBX is not required.
 
-The SPA uses the **Aquarius** visual system (azure `#28AFCA`, steel `#A2B7C8`, forest `#24566C`, Inter, pixel motif). Brand tokens: [`docs/BRAND.md`](docs/BRAND.md). UI language defaults to Russian.
-
 ## Spec index
 
 **[`docs/PROJECT_SPECIFICATION.md`](docs/PROJECT_SPECIFICATION.md)** (v2.0) is the map. Laws: [`docs/CONSTITUTION.md`](docs/CONSTITUTION.md). Agent loop: [`AGENTS.md`](AGENTS.md). Status: [`docs/STATUS.md`](docs/STATUS.md).
