@@ -43,5 +43,5 @@ All boxes must be true on `origin/main` for STOP=DONE.
 
 ## Git
 
-- [ ] Slice commits in natural Russian
-- [ ] `main` pushed to `origin`
+- [x] Slice commits in natural Russian
+- [x] `main` pushed to `origin`
