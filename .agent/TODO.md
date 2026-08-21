@@ -47,7 +47,7 @@
 
 ## P6 UI four views
 
-- [ ] classic / analytics / cc / cards + i18n
+- [x] classic / analytics / cc / cards + i18n
 
 ## P7 Harden
 

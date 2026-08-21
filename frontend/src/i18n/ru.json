@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "classic": "Классика",
+    "analytics": "Аналитика",
+    "contactCenter": "Контакт-центр",
+    "modern": "Карточки",
+    "health": "Здоровье",
+    "dialplan": "План нумерации",
+    "logs": "Журналы",
+    "recordings": "Записи"
+  },
+  "common": {
+    "loading": "Загрузка…",
+    "error": "Ошибка загрузки",
+    "retry": "Повторить",
+    "ingest": "Загрузить фикстуры",
+    "ingesting": "Загрузка…",
+    "empty": "Нет записей CDR",
+    "emptyHint": "Нажмите «Загрузить фикстуры», чтобы разобрать SMDR/IP-CDR из docs/fixtures.",
+    "total": "Всего",
+    "talkSeconds": "Разговор, сек",
+    "page": "Стр.",
+    "of": "из",
+    "prev": "Назад",
+    "next": "Вперёд",
+    "search": "Поиск",
+    "export": "Экспорт",
+    "language": "Язык"
+  },
+  "cdr": {
+    "startTime": "Начало",
+    "duration": "Длительность",
+    "ring": "Гудки",
+    "calling": "А",
+    "dialed": "Б",
+    "direction": "Направление",
+    "disposition": "Исход",
+    "vdn": "VDN",
+    "agent": "Агент",
+    "account": "Код",
+    "ucid": "UCID",
+    "inbound": "входящий",
+    "outbound": "исходящий",
+    "internal": "внутренний",
+    "tandem": "транзит",
+    "unknown": "неизвестно",
+    "answered": "отвечен",
+    "abandoned": "сброс",
+    "busy": "занято",
+    "no_answer": "без ответа",
+    "failed": "ошибка",
+    "transferred": "перевод",
+    "conferenced": "конференция",
+    "other": "прочее"
+  },
+  "classic": {
+    "title": "Классическая таблица CDR",
+    "subtitle": "Виртуализированная таблица с пагинацией по GET /api/cdr"
+  },
+  "analytics": {
+    "title": "Аналитика",
+    "subtitle": "KPI и графики по фикстурным CDR",
+    "answered": "Отвечено",
+    "abandonedPct": "Сбросы %",
+    "avgDuration": "Ср. длительность",
+    "avgRing": "Ср. гудки",
+    "uniqueAgents": "Уникальных агентов",
+    "byHour": "Объём по часам",
+    "byDirection": "По направлению"
+  },
+  "cc": {
+    "title": "Контакт-центр",
+    "subtitle": "SLA, агенты и VDN из полей CDR",
+    "sla": "SLA (ответ ≤ {n} с)",
+    "slaPct": "SLA %",
+    "agents": "Агенты",
+    "handled": "Обработано",
+    "avgHandle": "Ср. обработка",
+    "abandonRate": "Сбросы %",
+    "vdnSummary": "Сводка по VDN"
+  },
+  "modern": {
+    "title": "Карточки",
+    "subtitle": "Компактные карточки и таймлайн звонка",
+    "timeline": "Таймлайн",
+    "ringPhase": "Гудки",
+    "answerPhase": "Ответ",
+    "holdPhase": "Удержание",
+    "endPhase": "Завершение",
+    "noAgent": "без агента"
+  }
+}

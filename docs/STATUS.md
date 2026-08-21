@@ -1,16 +1,16 @@
 # STATUS
 
-**Phase:** P2 Health  
-**Branch target:** `main`  
-**Stop-met:** no (dialplan/logs/recordings/UI ACCEPTANCE remain)
+**Phase:** P6 UI four views  
+**Branch target:** `execute-plan/bbe44169-pr-5-p6-four-ui-views-and-i18n`  
+**Stop-met:** no (ACCEPTANCE / harden remain)
 
 ## Last fire
 
-P2: SAT parsers (`status health`, `display alarms`, `status ds1`); mock + SNMP stubs; `GET /api/pbx`, `/api/pbx/{id}/health`, `/api/alarms`; ingest SAT into snapshots/alarms; `/health` UI (Aquarius).
+P6: four CDR shells on fixture API — Classic (TanStack Table + pagination), Analytics (KPI + Recharts), Contact Center (SLA/agents/VDN), Modern (cards + timeline); i18n `ru`/`en` with Header toggle; Aquarius tokens; ops routes kept. `GET /api/stats` already present.
 
 ## Next slice
 
-**P3 Dialplan** — ARS + IPO shortcodes, `GET /api/dialplan`, `/dialplan` UI.
+**P7 Harden** — CI compose smoke, ACCEPTANCE v1 complete. Or remaining live SELECT for `RECORDINGS_SQL_URL`.
 
 ## Blockers
 

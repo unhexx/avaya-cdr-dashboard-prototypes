@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "classic": "Classic",
+    "analytics": "Analytics",
+    "contactCenter": "Contact Center",
+    "modern": "Cards",
+    "health": "Health",
+    "dialplan": "Dialplan",
+    "logs": "Logs",
+    "recordings": "Recordings"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Failed to load",
+    "retry": "Retry",
+    "ingest": "Load fixtures",
+    "ingesting": "Loading…",
+    "empty": "No CDR records",
+    "emptyHint": "Click “Load fixtures” to parse SMDR/IP-CDR from docs/fixtures.",
+    "total": "Total",
+    "talkSeconds": "Talk seconds",
+    "page": "Page",
+    "of": "of",
+    "prev": "Prev",
+    "next": "Next",
+    "search": "Search",
+    "export": "Export",
+    "language": "Language"
+  },
+  "cdr": {
+    "startTime": "Start",
+    "duration": "Duration",
+    "ring": "Ring",
+    "calling": "Calling",
+    "dialed": "Dialed",
+    "direction": "Direction",
+    "disposition": "Disposition",
+    "vdn": "VDN",
+    "agent": "Agent",
+    "account": "Account",
+    "ucid": "UCID",
+    "inbound": "inbound",
+    "outbound": "outbound",
+    "internal": "internal",
+    "tandem": "tandem",
+    "unknown": "unknown",
+    "answered": "answered",
+    "abandoned": "abandoned",
+    "busy": "busy",
+    "no_answer": "no answer",
+    "failed": "failed",
+    "transferred": "transferred",
+    "conferenced": "conferenced",
+    "other": "other"
+  },
+  "classic": {
+    "title": "Classic CDR table",
+    "subtitle": "Paginated table backed by GET /api/cdr"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "KPIs and charts from fixture CDR",
+    "answered": "Answered",
+    "abandonedPct": "Abandoned %",
+    "avgDuration": "Avg duration",
+    "avgRing": "Avg ring",
+    "uniqueAgents": "Unique agents",
+    "byHour": "Volume by hour",
+    "byDirection": "By direction"
+  },
+  "cc": {
+    "title": "Contact center",
+    "subtitle": "SLA, agents and VDN from CDR fields",
+    "sla": "SLA (answer ≤ {n} s)",
+    "slaPct": "SLA %",
+    "agents": "Agents",
+    "handled": "Handled",
+    "avgHandle": "Avg handle",
+    "abandonRate": "Abandon %",
+    "vdnSummary": "VDN summary"
+  },
+  "modern": {
+    "title": "Cards",
+    "subtitle": "Compact cards and call timeline",
+    "timeline": "Timeline",
+    "ringPhase": "Ring",
+    "answerPhase": "Answer",
+    "holdPhase": "Hold",
+    "endPhase": "End",
+    "noAgent": "no agent"
+  }
+}
