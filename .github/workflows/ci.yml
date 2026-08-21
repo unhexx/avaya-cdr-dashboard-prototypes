@@ -1,0 +1,75 @@
+# CI: pytest + ruff/mypy + frontend build. Фикстуры, без живой АТС.
+name: CI
+
+on:
+  push:
+    branches: [main, "execute-plan/**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      USE_FIXTURES: "true"
+      ENABLE_LIVE_CONNECTORS: "false"
+      APP_BASIC_AUTH_USER: ""
+      APP_BASIC_AUTH_PASSWORD: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv + deps
+        run: |
+          pip install -U pip
+          pip install uv
+          uv sync --all-extras
+
+      - name: Ruff
+        run: |
+          source .venv/bin/activate
+          ruff check backend
+
+      - name: Mypy
+        run: |
+          source .venv/bin/activate
+          mypy backend
+
+      - name: Pytest
+        run: |
+          source .venv/bin/activate
+          pytest -q --tb=short
+
+      - name: Compose config (optional)
+        run: docker compose config -q
+        continue-on-error: true
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install + build
+        run: |
+          npm ci
+          npm run build

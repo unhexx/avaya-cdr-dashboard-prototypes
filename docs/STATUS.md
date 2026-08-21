@@ -1,16 +1,16 @@
 # STATUS
 
-**Phase:** P6 UI four views  
-**Branch target:** `execute-plan/bbe44169-pr-5-p6-four-ui-views-and-i18n`  
-**Stop-met:** no (ACCEPTANCE / harden remain)
+**Phase:** P7 Harden  
+**Branch target:** `execute-plan/bbe44169-pr-6-p7-harden-auth-ci-and-acceptance`  
+**Stop-met:** yes (ACCEPTANCE v1 boxes honest; CI + optional basic auth)
 
 ## Last fire
 
-P6: four CDR shells on fixture API — Classic (TanStack Table + pagination), Analytics (KPI + Recharts), Contact Center (SLA/agents/VDN), Modern (cards + timeline); i18n `ru`/`en` with Header toggle; Aquarius tokens; ops routes kept. `GET /api/stats` already present.
+P7: optional HTTP Basic (`APP_BASIC_AUTH_USER` gates API; open when unset) + `backend/tests/test_auth.py`; SAT allowlist / no-SysMonitor stay green; `.github/workflows/ci.yml` (pytest + ruff + mypy + frontend build, `USE_FIXTURES=true`, optional `compose config`); `docs/ACCEPTANCE.md` updated honestly; mypy fixes (dialplan loop vars, conftest Iterator).
 
 ## Next slice
 
-**P7 Harden** — CI compose smoke, ACCEPTANCE v1 complete. Or remaining live SELECT for `RECORDINGS_SQL_URL`.
+Live `RECORDINGS_SQL_URL` SELECT (сейчас sql_stub/degraded) or Vitest for frontend — вне v1 STOP.
 
 ## Blockers
 

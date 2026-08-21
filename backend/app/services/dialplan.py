@@ -100,13 +100,13 @@ def load_fixture_dialplan(root: Path | None = None) -> list[dict[str, Any]]:
 
     ars_path = base / "cm" / "sat" / "list_ars_analysis.txt"
     if ars_path.is_file():
-        for item in parse_list_ars_analysis(ars_path.read_text(encoding="utf-8")):
-            rows.append(_ars_to_dict(item))
+        for ars_item in parse_list_ars_analysis(ars_path.read_text(encoding="utf-8")):
+            rows.append(_ars_to_dict(ars_item))
 
     ipo_path = base / "smdr" / "ipo-shortcodes.csv"
     if ipo_path.is_file():
-        for item in parse_ipo_shortcodes_csv(ipo_path.read_text(encoding="utf-8")):
-            rows.append(_ipo_to_dict(item))
+        for ipo_item in parse_ipo_shortcodes_csv(ipo_path.read_text(encoding="utf-8")):
+            rows.append(_ipo_to_dict(ipo_item))
 
     return rows
 

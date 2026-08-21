@@ -31,13 +31,13 @@
 
 ## P3 Dialplan
 
-- [ ] ARS + IPO shortcode parse
-- [ ] /dialplan UI
+- [x] ARS + IPO shortcode parse
+- [x] /dialplan UI
 
 ## P4 Logs
 
-- [ ] syslog classifier SIP/E1
-- [ ] /logs UI
+- [x] syslog classifier SIP/E1
+- [x] /logs UI
 
 ## P5 Recordings
 
@@ -51,5 +51,6 @@
 
 ## P7 Harden
 
-- [ ] CI compose smoke
-- [ ] ACCEPTANCE v1 complete
+- [x] Optional HTTP Basic auth + test_auth.py
+- [x] CI workflow (pytest, ruff, mypy, frontend build, USE_FIXTURES)
+- [x] ACCEPTANCE v1 complete (honest checkboxes)

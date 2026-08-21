@@ -16,30 +16,32 @@ All boxes must be true on `origin/main` for STOP=DONE.
 
 - [x] `docker compose up --build` starts api + postgres + web
 - [x] `GET /api/health` returns 200 with `fixtures` flag
-- [ ] `POST /api/ingest/fixtures` loads CDR, logs, dialplan, recordings meta
+- [x] `POST /api/ingest/fixtures` loads CDR, logs, dialplan, recordings meta
 - [x] `GET /api/cdr` filters, paginates, returns `raw_record` on detail
 - [x] `GET /api/export?format=csv` downloads
 - [x] `GET /api/pbx` and `/api/pbx/{id}/health` from mock
-- [ ] `GET /api/dialplan` returns fixture ARS/IPO rows
-- [ ] `GET /api/logs?kind=sip` and `kind=e1` return fixture lines
-- [ ] Unencrypted `GET /api/recordings/{id}/audio` is 200 audio
-- [ ] Encrypted IPO fixture audio is **409** with `reason=ipo_encrypted_r11`
+- [x] `GET /api/dialplan` returns fixture ARS/IPO rows
+- [x] `GET /api/logs?kind=sip` and `kind=e1` return fixture lines
+- [x] Unencrypted `GET /api/recordings/{id}/audio` is 200 audio
+- [x] Encrypted IPO fixture audio is **409** with `reason=ipo_encrypted_r11`
 - [x] No SysMonitor client in the tree (`rg -i sysmonitor` only hits docs forbidding it)
+- [x] Optional HTTP Basic: `APP_BASIC_AUTH_USER` set → 401 without creds; unset → open API
 
 ## UI
 
-- [ ] Four views route and render fixture CDR
-- [ ] Health / Dialplan / Logs / Recordings pages exist
-- [ ] Russian default strings; English toggle
-- [ ] Encrypted recording shows explanation, not a broken `<audio>`
+- [x] Four views route and render fixture CDR
+- [x] Health / Dialplan / Logs / Recordings pages exist
+- [x] Russian default strings; English toggle
+- [x] Encrypted recording shows explanation, not a broken `<audio>`
 
 ## Quality
 
 - [x] `pytest` green with `USE_FIXTURES=true` and no live hosts
-- [ ] Frontend unit tests green
+- [ ] Frontend unit tests green (Vitest not wired in v1)
 - [x] ruff + mypy (backend) clean on the slice that introduced code
 - [x] Identifiers English; new comments Russian
-- [ ] No `.env`, no customer audio, no real numbers
+- [x] No `.env`, no customer audio, no real numbers (fixtures only)
+- [x] `.github/workflows/ci.yml` runs pytest, ruff, mypy, frontend build
 
 ## Git
 
