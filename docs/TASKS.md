@@ -2,11 +2,11 @@
 
 INVEST backlog. Execution copy with checkboxes: `.agent/TODO.md`.
 
-## D0 — Docs package (current)
+## D0 — Docs package (done)
 
 - Root agent files, docs index v2.0, ADRs 0001–0011, fixtures, `.agent/*`, Shields README.
 
-## P0 — Scaffold
+## P0 — Scaffold (this fire)
 
 - `backend/` FastAPI app, Pydantic settings, `/api/health`
 - `docker-compose.yml` postgres + api + web

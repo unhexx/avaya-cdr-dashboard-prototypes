@@ -1,7 +1,7 @@
 # SPRINTPLAN.md
 
-**Sprint:** Docs package (D0) toward first release  
-**Status:** IN_PROGRESS  
+**Sprint:** P0 backend scaffold  
+**Status:** IN_PROGRESS (D0 docs done; P0 this fire)  
 **Goal:** Land the complete documentation set on `origin/main` so the next fire can implement connectors without inventing product law.
 
 ## This Sprint

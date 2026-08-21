@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.3.0 — 2026-08-21
+
+### Added
+
+- FastAPI backend: settings, `/api/health`, optional HTTP Basic.
+- SQLAlchemy models and Alembic `0001_initial` matching `docs/DATA_MODEL.md`.
+- `docker-compose.yml`: postgres + api + web (Aquarius SPA via nginx).
+- pytest skeleton (health, settings, schema, no-SysMonitor).
+
 ## 0.2.0 — 2026-08-21
 
 ### Notes

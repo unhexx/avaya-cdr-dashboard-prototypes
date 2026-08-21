@@ -7,15 +7,15 @@
 - [x] ADRs 0001–0011
 - [x] Fixtures smdr/cm/syslog/sql/recordings
 - [x] .agent PLAN TODO project_config; SPRINTPLAN PROJECT_CONTEXT
-- [ ] Push to origin/main (this fire)
-- [ ] ACCEPTANCE docs checkboxes true on origin
+- [x] Push to origin/main (this fire)
+- [x] ACCEPTANCE docs checkboxes true on origin
 
-## P0 Scaffold (next fire)
+## P0 Scaffold (this fire)
 
-- [ ] backend FastAPI + settings + /api/health
-- [ ] docker-compose.yml postgres + api
-- [ ] Alembic migration for DATA_MODEL.md
-- [ ] pytest skeleton
+- [x] backend FastAPI + settings + /api/health
+- [x] docker-compose.yml postgres + api
+- [x] Alembic migration for DATA_MODEL.md
+- [x] pytest skeleton
 
 ## P1 CDR ingest
 

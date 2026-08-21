@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: avaya
+      POSTGRES_PASSWORD: avaya
+      POSTGRES_DB: avaya_cdr
+    ports:
+      - "127.0.0.1:15432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U avaya -d avaya_cdr"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://avaya:avaya@postgres:5432/avaya_cdr
+      USE_FIXTURES: "true"
+      ENABLE_LIVE_CONNECTORS: "false"
+      APP_BASIC_AUTH_USER: ""
+      APP_BASIC_AUTH_PASSWORD: ""
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "127.0.0.1:4173:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 192.168.120.0/24
+

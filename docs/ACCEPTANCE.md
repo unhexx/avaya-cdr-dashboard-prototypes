@@ -4,18 +4,18 @@ All boxes must be true on `origin/main` for STOP=DONE.
 
 ## Docs
 
-- [ ] Root: `AGENTS.md` `README.md` `LICENSE` `.gitignore` `.env.example` `Agent-Init.sh` `SYSTEM_PROMPT.md` `TASK_SPECIFICATION.md` `DEVELOPMENT_STANDARDS.md` `prompts/short_orchestrator_prompt.md`
-- [ ] `docs/PROJECT_SPECIFICATION.md` is v2.0 index
-- [ ] Constitution, product, architecture, data model, API, connectors, Avaya, dialplan, logs, recordings, UI, security, testing, deployment, acceptance, roadmap, agent guide, tasks, changelog, status
-- [ ] ADRs 0001–0011
-- [ ] Fixtures: smdr, cm, syslog, sql, recordings
-- [ ] `.agent/PLAN.md` `.agent/TODO.md` `.agent/project_config.json`
-- [ ] README badges are Shields.io `style=flat-square` on `https://img.shields.io`
+- [x] Root: `AGENTS.md` `README.md` `LICENSE` `.gitignore` `.env.example` `Agent-Init.sh` `SYSTEM_PROMPT.md` `TASK_SPECIFICATION.md` `DEVELOPMENT_STANDARDS.md` `prompts/short_orchestrator_prompt.md`
+- [x] `docs/PROJECT_SPECIFICATION.md` is v2.0 index
+- [x] Constitution, product, architecture, data model, API, connectors, Avaya, dialplan, logs, recordings, UI, security, testing, deployment, acceptance, roadmap, agent guide, tasks, changelog, status
+- [x] ADRs 0001–0011
+- [x] Fixtures: smdr, cm, syslog, sql, recordings
+- [x] `.agent/PLAN.md` `.agent/TODO.md` `.agent/project_config.json`
+- [x] README badges are Shields.io `style=flat-square` on `https://img.shields.io`
 
 ## Runtime
 
-- [ ] `docker compose up --build` starts api + postgres + web
-- [ ] `GET /api/health` returns 200 with `fixtures` flag
+- [x] `docker compose up --build` starts api + postgres + web
+- [x] `GET /api/health` returns 200 with `fixtures` flag
 - [ ] `POST /api/ingest/fixtures` loads CDR, logs, dialplan, recordings meta
 - [ ] `GET /api/cdr` filters, paginates, returns `raw_record` on detail
 - [ ] `GET /api/export?format=csv` downloads

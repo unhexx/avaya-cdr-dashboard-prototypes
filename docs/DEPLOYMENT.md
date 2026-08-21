@@ -8,7 +8,7 @@ Services: `api`, `web`, `postgres`. Profiles:
 - `recordings`: + `mariadb` loaded with `docs/fixtures/sql`  
 - `redis`: optional cache  
 
-Bind `127.0.0.1:8000` (API) and `127.0.0.1:4173` (web) unless `PUBLISH_PUBLIC=1`.
+Bind `127.0.0.1:8000` (API), `127.0.0.1:4173` (web), `127.0.0.1:15432` (Postgres, host-side to avoid clashing with a local 5432). Compose default network uses a fixed subnet `192.168.120.0/24`.
 
 ## Environment
 

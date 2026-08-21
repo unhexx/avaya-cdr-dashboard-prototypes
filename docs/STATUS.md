@@ -1,25 +1,19 @@
 # STATUS
 
-**Phase:** docs-package (D0) complete on this fire; frontend Aquarius foundation already on `main`  
+**Phase:** P0 backend scaffold  
 **Branch target:** `main`  
-**Stop-met:** no (v1 runtime / ACCEPTANCE code boxes remain)
+**Stop-met:** no (CDR ingest and remaining ACCEPTANCE runtime boxes open)
 
 ## Last fire
 
-Documentation package v2.0 (constitution, ADRs 0001–0011, fixtures, agent loop files) rebased onto the Aquarius UI foundation (`docs/BRAND.md`, shared Button/Card/Badge, sample CDR mock).
+P0: FastAPI `/api/health`, Pydantic settings, SQLAlchemy models, Alembic `0001_initial` (full DATA_MODEL), docker-compose `postgres` + `api` + `web`.
 
-Primary worktree `/home/unhex/_PROJECT/avaya-cdr-dashboard-prototypes` may be root-owned; this fire writes from a user clone and pushes `origin/main`.
-
-## Already on main (not this fire)
-
-- Vite + React + TS + Tailwind scaffold
-- Aquarius tokens, Header, routing stubs for four prototypes
-- `frontend/src/mocks/sample-cdr.ts`
+Primary worktree may be root-owned; work continues from a user clone then `git push origin main`.
 
 ## Next slice
 
-**P0 backend scaffold** (FastAPI + compose + Alembic) per `docs/TASKS.md`. UI slices must keep Aquarius tokens (`docs/BRAND.md`).
+**P1 CDR ingest** — CM unformatted/expanded/customized + IPO SMDR parsers, `GET /api/cdr`, fixture ingest.
 
 ## Blockers
 
-- None for docs. Code ACCEPTANCE still open.
+- None for P0. Keep Aquarius tokens on UI slices. No SysMonitor. Encrypted IPO audio stays 409.
