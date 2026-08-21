@@ -7,6 +7,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
+from app.api.cdr import router as cdr_router
 from app.api.deps import optional_basic_auth
 from app.api.health import router as health_router
 from app.config import get_settings
@@ -42,6 +43,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     application.include_router(health_router, prefix="/api")
+    application.include_router(cdr_router, prefix="/api")
     application.state.settings = settings
     return application
 

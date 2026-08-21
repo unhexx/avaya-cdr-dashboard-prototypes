@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.4.0 — 2026-08-21
+
+### Added
+
+- CM CDR parsers (unformatted / expanded / customized) and IPO SMDR CSV (header-based).
+- `POST /api/ingest/fixtures`, `GET /api/cdr`, detail with `raw_record`, CSV/JSON export, mock-generate.
+- Dedup on `(source_system, raw_hash)`.
+
 ## 0.3.0 — 2026-08-21
 
 ### Added

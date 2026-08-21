@@ -17,8 +17,8 @@ All boxes must be true on `origin/main` for STOP=DONE.
 - [x] `docker compose up --build` starts api + postgres + web
 - [x] `GET /api/health` returns 200 with `fixtures` flag
 - [ ] `POST /api/ingest/fixtures` loads CDR, logs, dialplan, recordings meta
-- [ ] `GET /api/cdr` filters, paginates, returns `raw_record` on detail
-- [ ] `GET /api/export?format=csv` downloads
+- [x] `GET /api/cdr` filters, paginates, returns `raw_record` on detail
+- [x] `GET /api/export?format=csv` downloads
 - [ ] `GET /api/pbx` and `/api/pbx/{id}/health` from mock
 - [ ] `GET /api/dialplan` returns fixture ARS/IPO rows
 - [ ] `GET /api/logs?kind=sip` and `kind=e1` return fixture lines

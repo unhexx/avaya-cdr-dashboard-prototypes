@@ -1,19 +1,18 @@
 # STATUS
 
-**Phase:** P0 backend scaffold  
+**Phase:** P1 CDR ingest  
 **Branch target:** `main`  
-**Stop-met:** no (CDR ingest and remaining ACCEPTANCE runtime boxes open)
+**Stop-met:** no (health/dialplan/logs/recordings/UI ACCEPTANCE remain)
 
 ## Last fire
 
-P0: FastAPI `/api/health`, Pydantic settings, SQLAlchemy models, Alembic `0001_initial` (full DATA_MODEL), docker-compose `postgres` + `api` + `web`.
-
-Primary worktree may be root-owned; work continues from a user clone then `git push origin main`.
+P1: parsers CM unformatted/expanded/customized + IPO SMDR; `POST /api/ingest/fixtures`; `GET /api/cdr` + detail + CSV/JSON export; mock-generate. Tests on in-memory repo + golden fixtures.
 
 ## Next slice
 
-**P1 CDR ingest** — CM unformatted/expanded/customized + IPO SMDR parsers, `GET /api/cdr`, fixture ingest.
+**P2 Health** — snapshots, alarms, mock SAT, `/health` UI (Aquarius tokens).
 
 ## Blockers
 
-- None for P0. Keep Aquarius tokens on UI slices. No SysMonitor. Encrypted IPO audio stays 409.
+- Primary worktree may be root-owned; SSOT is `origin/main`.
+- No SysMonitor. Encrypted IPO audio stays 409 (P5).

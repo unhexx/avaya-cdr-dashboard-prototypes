@@ -17,12 +17,12 @@
 - [x] Alembic migration for DATA_MODEL.md
 - [x] pytest skeleton
 
-## P1 CDR ingest
+## P1 CDR ingest (this fire)
 
-- [ ] CM unformatted/expanded/customized parsers
-- [ ] IPO SMDR parser
-- [ ] GET /api/cdr + export
-- [ ] ingest fixtures endpoint
+- [x] CM unformatted/expanded/customized parsers
+- [x] IPO SMDR parser
+- [x] GET /api/cdr + export
+- [x] ingest fixtures endpoint
 
 ## P2 Health
 
