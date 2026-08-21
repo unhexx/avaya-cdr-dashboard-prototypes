@@ -96,7 +96,6 @@ class SqlSourceConnector:
 
     def __init__(self) -> None:
         self._rows: list[dict[str, Any]] = []
-        self._sql_stub = False
 
     async def start(self) -> None:
         settings = get_settings()
@@ -104,14 +103,11 @@ class SqlSourceConnector:
             # Живой SELECT откладываем: v1 CI работает на фикстурах.
             # DSN задан → stub (degraded), без ложного «ok / sql».
             self._rows = []
-            self._sql_stub = True
             return
-        self._sql_stub = False
         self._rows = load_fixture_recordings()
 
     async def stop(self) -> None:
         self._rows = []
-        self._sql_stub = False
 
     async def poll_health(self) -> dict[str, Any]:
         settings = get_settings()
